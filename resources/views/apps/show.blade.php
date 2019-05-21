@@ -3,21 +3,19 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <h1>APP</h1>
+            <h1>Annual Procurement Plan Details</h1>
         </div>
         <div class="col">
             {{-- <a href="/consolidate" class="btn btn-outline-primary float-right">Consolidate</a> --}}
             <a href="/apps" class="btn float-right">Back</a>
-            <a href="#" onclick="window.print()">Print PDF</a>
+            {{-- <a href="#" onclick="window.print()">Print PDF</a> --}}
         </div>
     </div>
     <hr>
     <div class="row">
         <div class="col-5">
+            <h3>Information</h3>
             <table class="table table-bordered table-sm">
-                <thead align="center" class="thead thead-dark">
-                    <th colspan="2">Information</th>
-                </thead>
                 <tbody>
                     <tr>
                         <th>APP #</th>
@@ -47,14 +45,17 @@
                         <th>Remark</th>
                         <td>{{$apps->remark}}</td>
                     </tr>  
+                    <tr align="center">
+                        <td colspan="2">
+                            <a href="#" onclick="window.print()">Export to PDF</a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div class="col">
+            <h3>Items</h3>
             <table class="table table-bordered table-sm table-hover">
-                <thead align="center" class="thead thead-dark">
-                    <th colspan="5">Items</th>
-                </thead>
                 <thead align="center">
                     <th>Description</th>
                     <th>Quarter</th>

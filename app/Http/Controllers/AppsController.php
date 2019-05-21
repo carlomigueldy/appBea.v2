@@ -20,6 +20,9 @@ class AppsController extends Controller
         ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
         ->join('accounts', 'accounts.id', 'apps.account_id')
         ->join('mops', 'mops.id', 'apps.mop_id')
+        ->select('apps.id', 'apps.ppmp_id', 'apps.type', 'apps.year', 'apps.remark', 'cost_centers.costcenter_name', 
+        'fund_sources.fundsource_name', 'accounts.account_no', 'mops.mop_name')
+        ->orderBy('apps.id', 'asc')
         ->paginate(10);
 
         return view('apps.index')->with('apps', $apps);
@@ -40,7 +43,7 @@ class AppsController extends Controller
         ->orWhere('apps.type', 'ILIKE', '%'.$q.'%')
         ->orWhere('apps.year', 'ILIKE', '%'.$q.'%')
         ->orWhere('apps.remark', 'ILIKE', '%'.$q.'%')
-        ->get();
+        ->paginate(10);
         
         if(count($apps) > 0)
             return view('apps.index')->with('success', 'Search results are being displayed.')->with('apps', $apps)->withQuery( $q);
@@ -82,7 +85,7 @@ class AppsController extends Controller
         ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
         ->join('accounts', 'accounts.id', 'apps.account_id')
         ->join('mops', 'mops.id', 'apps.mop_id')
-        ->select('apps.id', 'apps.type', 'apps.year', 'apps.remark', 'cost_centers.costcenter_name', 
+        ->select('apps.id', 'apps.ppmp_id', 'apps.type', 'apps.year', 'apps.remark', 'cost_centers.costcenter_name', 
         'fund_sources.fundsource_name', 'accounts.account_no', 'mops.mop_name')
         ->where('apps.id', $id)
         ->first();
