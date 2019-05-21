@@ -15,6 +15,7 @@ class CreateAppDetailsTable extends Migration
     {
         Schema::create('app_details', function (Blueprint $table) {
             $table->integer('item_id');
+            $table->integer('lot_no')->default(0);
             $table->integer('app_id');
             $table->string('quarter');
             $table->integer('quantity');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use DB;
 
 class AppsController extends Controller
@@ -19,9 +20,32 @@ class AppsController extends Controller
         ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
         ->join('accounts', 'accounts.id', 'apps.account_id')
         ->join('mops', 'mops.id', 'apps.mop_id')
-        ->get();
+        ->paginate(10);
 
         return view('apps.index')->with('apps', $apps);
+    }
+
+    public function search()
+    {
+        $q = Input::get ('q');
+        $apps = DB::table('apps')
+        ->join('cost_centers', 'cost_centers.id', 'apps.costcenter_id')
+        ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
+        ->join('accounts', 'accounts.id', 'apps.account_id')
+        ->join('mops', 'mops.id', 'apps.mop_id')
+        ->where('cost_centers.costcenter_name', 'ILIKE', '%'.$q.'%')
+        ->orWhere('fund_sources.fundsource_name', 'ILIKE', '%'.$q.'%')
+        ->orWhere('accounts.account_no', 'ILIKE', '%'.$q.'%')
+        ->orWhere('mops.mop_name', 'ILIKE', '%'.$q.'%')
+        ->orWhere('apps.type', 'ILIKE', '%'.$q.'%')
+        ->orWhere('apps.year', 'ILIKE', '%'.$q.'%')
+        ->orWhere('apps.remark', 'ILIKE', '%'.$q.'%')
+        ->get();
+        
+        if(count($apps) > 0)
+            return view('apps.index')->with('success', 'Search results are being displayed.')->with('apps', $apps)->withQuery( $q);
+        else 
+            return view('apps.index')->with('error', 'No search results.');
     }
 
     /**

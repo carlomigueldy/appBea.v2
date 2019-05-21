@@ -3,7 +3,8 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <h1>APPs</h1>
+            <h1>Annual Procurement Plan</h1>
+            @include('inc.search')
         </div>
     </div>
     <hr>
@@ -33,7 +34,7 @@
                             <td>{{$row->year}}</td>
                             <td>{{$row->remark}}</td>
                             <td>
-                                <a href="/apps/{{$row->id}}">View</a>
+                                <a href="/apps/{{$row->id}}" class="btn btn-outline-primary btn-sm">View</a>
                                 {{-- <a href="#" onclick="window.print()">Print</a> --}}
                             </td>
                         </tr>
@@ -46,4 +47,5 @@
             </tbody>
         </table>
     </div>
+    {{$apps->links()}}
 @endsection

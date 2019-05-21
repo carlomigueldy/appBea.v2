@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <h1>PPMPs</h1>
+            <h1>Project Procurement Management Plan</h1>
         </div>
     </div>
     <hr>

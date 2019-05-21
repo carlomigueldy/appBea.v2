@@ -22,3 +22,4 @@ Route::post('/consolidated', 'PpmpsController@store');
 
 Route::resource('apps', 'AppsController');
 Route::resource('ppmps', 'PpmpsController');
+Route::any('/search', 'AppsController@search');
