@@ -80,6 +80,8 @@ class AppsController extends Controller
      */
     public function show($id)
     {
+        $grandTotal = 0;
+
         $apps = DB::table('apps')
         ->join('cost_centers', 'cost_centers.id', 'apps.costcenter_id')
         ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
@@ -94,8 +96,10 @@ class AppsController extends Controller
         ->join('items', 'items.id', 'app_details.item_id')
         ->select(
             'items.description',
+            'items.specification',
             'app_details.app_id',
             'app_details.quarter',
+            'app_details.lot_no',
             'app_details.quantity',
             'app_details.unit_price',
             'app_details.amount'
@@ -103,7 +107,7 @@ class AppsController extends Controller
         ->where('app_details.app_id', $id)
         ->get();
 
-        return view('apps.show')->with('apps', $apps)->with('app_details', $app_details);
+        return view('apps.show')->with('apps', $apps)->with('app_details', $app_details)->with('grandTotal', $grandTotal);
     }
 
     /**
