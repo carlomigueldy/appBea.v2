@@ -13,11 +13,11 @@ ALTER TABLE app_details
 -- Sample datas.
 
 INSERT INTO items (description, specification, unit)
-VALUES ('Item One', 'Just a description', 'box'),
-('Item Two', 'Just a description', 'pair'),
-('Item Three', 'Just a description', 'gallon'),
-('Item Four', 'Just a description', 'pound'),
-('Item Five', 'Just a description', 'ream');
+VALUES ('Chemicals', 'Laboratory Supply', 'box'),
+('PC Monitor', '1920x1080 Resolution', 'piece'),
+('Air-Conditioner', 'Inverter', 'device'),
+('HP Printer', 'For the paperworks', 'box'),
+('Long & Short Bondpapers', 'Resupply of bondpapers', 'ream');
 
 INSERT INTO mops (mop_name)
 VALUES ('Direct Contracting'),
