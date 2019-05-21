@@ -7,6 +7,7 @@ use DB;
 use App\Apps;
 use App\PpmpItem;
 use App\AppDetail;
+use App\Ppmp;
 
 class PpmpsController extends Controller
 {
@@ -24,6 +25,7 @@ class PpmpsController extends Controller
         ->join('mops', 'mops.id', 'ppmps.mop_id')
         ->select('ppmps.*', 'cost_centers.costcenter_name', 
         'fund_sources.fundsource_name', 'accounts.account_no', 'mops.mop_name')
+        ->where('remark', 'Unconsolidated')
         ->paginate(10);
         
         return view('ppmps.index')->with('ppmps', $ppmps);
@@ -70,12 +72,16 @@ class PpmpsController extends Controller
         $apps->year = $request->input('year');
         $apps->save();
 
+        // A placeholder for variable ppmp_id
+        $ppmp_id = $request->input('ppmp_id');
+
+        // Updating a PPMP with a remark of "Consolidated"
+        Ppmp::where('id', $ppmp_id)->update(['remark' => 'Consolidated']);
+
         // Fetching the last inserted ID
         $insertedId = $apps->id;
 
         if($insertedId > 0){
-            // A placeholder for variable ppmp_id
-            $ppmp_id = $request->input('ppmp_id');
 
             $inserts = [];
             $ppmp_items = PpmpItem::where('ppmp_id', $ppmp_id)->get();
@@ -109,7 +115,30 @@ class PpmpsController extends Controller
      */
     public function show($id)
     {
-        //
+        $ppmps = DB::table('ppmps')
+        ->join('cost_centers', 'cost_centers.id', 'ppmps.costcenter_id')
+        ->join('fund_sources', 'fund_sources.id', 'ppmps.fundsource_id')
+        ->join('accounts', 'accounts.id', 'ppmps.account_id')
+        ->join('mops', 'mops.id', 'ppmps.mop_id')
+        ->select('ppmps.id', 'ppmps.type', 'ppmps.year', 'ppmps.remark', 'cost_centers.costcenter_name', 
+        'fund_sources.fundsource_name', 'accounts.account_no', 'mops.mop_name')
+        ->where('ppmps.id', $id)
+        ->first();
+
+        $ppmp_items = DB::table('ppmp_items')
+        ->join('items', 'items.id', 'ppmp_items.item_id')
+        ->select(
+            'items.description',
+            'ppmp_items.ppmp_id',
+            'ppmp_items.quarter',
+            'ppmp_items.quantity',
+            'ppmp_items.unit_price',
+            'ppmp_items.amount'
+            )
+        ->where('ppmp_items.ppmp_id', $id)
+        ->get();
+
+        return view('ppmps.show')->with('ppmps', $ppmps)->with('ppmp_items', $ppmp_items);
     }
 
     /**

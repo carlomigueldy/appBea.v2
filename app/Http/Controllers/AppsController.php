@@ -53,7 +53,30 @@ class AppsController extends Controller
      */
     public function show($id)
     {
-        //
+        $apps = DB::table('apps')
+        ->join('cost_centers', 'cost_centers.id', 'apps.costcenter_id')
+        ->join('fund_sources', 'fund_sources.id', 'apps.fundsource_id')
+        ->join('accounts', 'accounts.id', 'apps.account_id')
+        ->join('mops', 'mops.id', 'apps.mop_id')
+        ->select('apps.id', 'apps.type', 'apps.year', 'apps.remark', 'cost_centers.costcenter_name', 
+        'fund_sources.fundsource_name', 'accounts.account_no', 'mops.mop_name')
+        ->where('apps.id', $id)
+        ->first();
+
+        $app_details = DB::table('app_details')
+        ->join('items', 'items.id', 'app_details.item_id')
+        ->select(
+            'items.description',
+            'app_details.app_id',
+            'app_details.quarter',
+            'app_details.quantity',
+            'app_details.unit_price',
+            'app_details.amount'
+            )
+        ->where('app_details.app_id', $id)
+        ->get();
+
+        return view('apps.show')->with('apps', $apps)->with('app_details', $app_details);
     }
 
     /**
